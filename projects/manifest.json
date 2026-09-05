@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "umbrella": "Lei-TzuY/distributed-data-lab",
+  "generated_from_preflight_date": "2026-09-05",
+  "projects": [
+    {
+      "name": "database-design-lab",
+      "source_repository": "Lei-TzuY/database-design-lab",
+      "target_path": "projects/database-design-lab",
+      "layer": "relational-storage-engine",
+      "status": "hold",
+      "observed_main_sha": "35c226fbdfd8334f62f6a0a9fdeef39bc1fbc0c3",
+      "active_pr_number": 128,
+      "active_pr_head_sha": "681bfad427928b35a2bbd491406f1292f6226bf2",
+      "blocker": "Open implementation PR #128 maintains secondary indexes across relational commits; do not freeze while this correctness/integration work remains active.",
+      "integration_notes": "Potential differential or replicated-state edges require an explicit common workload/state contract; no equivalence with tinydb-c is assumed."
+    },
+    {
+      "name": "distributed-systems-lab",
+      "source_repository": "Lei-TzuY/distributed-systems-lab",
+      "target_path": "projects/distributed-systems-lab",
+      "layer": "consensus-replication",
+      "status": "hold",
+      "observed_main_sha": "5cd1fa28fee3bcf8f1e6742b7f1033f2e7365828",
+      "active_pr_number": 65,
+      "active_pr_head_sha": "910561b8ec298f23567133802c82db4bf94c5126",
+      "blocker": "Open implementation PR #65 hardens AppendEntries attempt correlation against stale success responses; recheck the resulting source checkpoint before migration.",
+      "integration_notes": "Consensus/replication code is not a distributed database until a real state-machine command, snapshot, failure and durability boundary is executable."
+    },
+    {
+      "name": "tinydb-c",
+      "source_repository": "Lei-TzuY/tinydb-c",
+      "target_path": "projects/tinydb-c",
+      "layer": "sql-storage-engine",
+      "status": "hold",
+      "observed_main_sha": "c0de1768ae3080ec6d12796f82e5abf5a27be89f",
+      "active_pr_number": 5,
+      "active_pr_head_sha": "c22699d8877bb9bb109c670a67d225e1285623d4",
+      "blocker": "Stage 1 stabilization PR #5 spans the authoritative storage/recovery/planner checkpoint and remains open; importing main now would intentionally omit that in-flight history.",
+      "integration_notes": "No SQLite-replacement, arbitrary concurrency, replication or cross-engine equivalence claim is inherited by the umbrella."
+    }
+  ]
+}
