@@ -1,0 +1,28 @@
+name: Umbrella manifest
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "projects/manifest.json"
+      - "scripts/validate_manifest.py"
+      - ".github/workflows/manifest.yml"
+  pull_request:
+    paths:
+      - "projects/manifest.json"
+      - "scripts/validate_manifest.py"
+      - ".github/workflows/manifest.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Validate migration manifest
+        run: python scripts/validate_manifest.py
