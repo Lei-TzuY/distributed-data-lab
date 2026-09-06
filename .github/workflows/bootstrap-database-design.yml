@@ -67,7 +67,7 @@ jobs:
           parts = raw.split("\0")
           commits = []
           for i in range(0, len(parts) - 1, 2):
-              sha, body = parts[i], parts[i + 1]
+              sha, body = parts[i].strip(), parts[i + 1]
               if sha:
                   commits.append((sha, body))
 
