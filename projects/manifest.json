@@ -1,18 +1,29 @@
 {
   "schema_version": 1,
   "umbrella": "Lei-TzuY/distributed-data-lab",
-  "generated_from_preflight_date": "2026-09-05",
+  "generated_from_preflight_date": "2026-09-07",
   "projects": [
     {
       "name": "database-design-lab",
       "source_repository": "Lei-TzuY/database-design-lab",
       "target_path": "projects/database-design-lab",
       "layer": "relational-storage-engine",
-      "status": "hold",
-      "observed_main_sha": "35c226fbdfd8334f62f6a0a9fdeef39bc1fbc0c3",
-      "active_pr_number": 128,
-      "active_pr_head_sha": "681bfad427928b35a2bbd491406f1292f6226bf2",
-      "blocker": "Open implementation PR #128 maintains secondary indexes across relational commits; do not freeze while this correctness/integration work remains active.",
+      "status": "ready-for-import",
+      "observed_main_sha": "fba592f25225621f83931662565120c43ede1885",
+      "source_tree_sha": "4c5bb1129c4b145923dafa2003412bcda8c0c806",
+      "blocker": null,
+      "source_ci_run_id": 34061539532,
+      "source_ci_conclusion": "success",
+      "source_equivalent_ci": [
+        "cargo fmt --all -- --check",
+        "cargo clippy --workspace --all-targets --all-features --locked -- -D warnings",
+        "cargo test --workspace --all-features --locked on Ubuntu, macOS, and Windows",
+        "RUSTDOCFLAGS=-D warnings cargo doc --workspace --all-features --no-deps --locked",
+        "Rust 1.85: cargo check --workspace --all-targets --all-features --locked"
+      ],
+      "legacy_github_actions_bot_trailer_count": 4,
+      "provenance_notes": "Canonical commit history was traversed through the GitHub commits API from the exact source head until the first empty page. Configured attribution searches found exactly four Co-authored-by trailers, all github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>, and zero Generated-By, Assisted-By, Signed-off-by, Claude, Anthropic, or OpenAI hits. Preserve the four historical CI-bot trailers; do not rewrite source history.",
+      "repository_hygiene_notes": "Exact source tree contains LICENSE, Cargo workspace/lockfile, source/tests/docs/workflows and no .gitmodules or committed target/cache tree observed in the recursive tree review.",
       "integration_notes": "Potential differential or replicated-state edges require an explicit common workload/state contract; no equivalence with tinydb-c is assumed."
     },
     {
@@ -20,11 +31,20 @@
       "source_repository": "Lei-TzuY/distributed-systems-lab",
       "target_path": "projects/distributed-systems-lab",
       "layer": "consensus-replication",
-      "status": "hold",
-      "observed_main_sha": "5cd1fa28fee3bcf8f1e6742b7f1033f2e7365828",
-      "active_pr_number": 65,
-      "active_pr_head_sha": "910561b8ec298f23567133802c82db4bf94c5126",
-      "blocker": "Open implementation PR #65 hardens AppendEntries attempt correlation against stale success responses; recheck the resulting source checkpoint before migration.",
+      "status": "ready-for-import",
+      "observed_main_sha": "1837b0ece467e3dff598643768b91543acc1350a",
+      "source_tree_sha": "7f54c63fb8d67acde388747dc39544233f8c1dc0",
+      "blocker": null,
+      "source_ci_run_id": 34064569580,
+      "source_ci_conclusion": "success",
+      "source_equivalent_ci": [
+        "Ubuntu/macOS/Windows x Python 3.11/3.13",
+        "python -m pip install -e .[dev]",
+        "ruff check .",
+        "pytest"
+      ],
+      "provenance_notes": "The complete canonical commit list from the exact source head fits in one 100-entry GitHub commits API page and the next page is empty. Configured searches found zero Co-authored-by, Generated-By, Assisted-By, Signed-off-by, Claude, Anthropic, or OpenAI hits.",
+      "repository_hygiene_notes": "Recursive exact-tree review contains source, tests, docs, pyproject, and read-only CI with no .gitmodules or obvious committed cache/build payload. No top-level LICENSE file is present; migration must preserve that source state rather than invent licensing metadata.",
       "integration_notes": "Consensus/replication code is not a distributed database until a real state-machine command, snapshot, failure and durability boundary is executable."
     },
     {
