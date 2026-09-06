@@ -4,37 +4,43 @@
 
 - [x] initialize the umbrella repository;
 - [x] define database/distributed-system boundaries and forbid fake integration claims;
-- [x] record exact observed source mains and implementation blockers;
 - [x] add a machine-checked migration manifest and CI gate;
-- [x] re-run live preflight after source implementation lanes moved;
+- [x] re-run live source preflight after implementation lanes moved;
 - [x] promote stable `database-design-lab` and `distributed-systems-lab` checkpoints to READY FOR IMPORT;
-- [ ] keep `tinydb-c` on HOLD until its authoritative Stage 1 stabilization lane settles.
-
-Current source state:
-
-- `database-design-lab@fba592f25225621f83931662565120c43ede1885` — **READY FOR IMPORT**; zero open PRs, source CI `34061539532` 5/5 green, exact source tree `4c5bb112...`, four historical GitHub Actions bot co-author trailers preserved as a legacy provenance exception;
-- `distributed-systems-lab@1837b0ece467e3dff598643768b91543acc1350a` — **READY FOR IMPORT** after #82 merged; zero open PRs, source CI `34064569580` green across Ubuntu/macOS/Windows × Python 3.11/3.13, exact source tree `7f54c63f...`, configured attribution markers zero;
-- `tinydb-c@c0de1768ae3080ec6d12796f82e5abf5a27be89f` — **HOLD**, Stage 1 stabilization PR #5 active.
-
-READY is not IMPORTED. No project crosses that boundary until source ancestry and exact tree identity are genuinely preserved in the umbrella and source-equivalent CI passes from the imported path.
+- [x] keep `tinydb-c` on HOLD while its authoritative Stage 1 stabilization lane remains active.
 
 ## Phase 1 — History-preserving imports
 
-Next executable migration sequence:
+### `database-design-lab`
 
-1. [ ] recheck `database-design-lab` live source/main/open PR immediately before import;
-2. [ ] non-squashed import `database-design-lab` at the exact READY SHA;
-3. [ ] prove frozen source ancestry and exact tree identity;
-4. [ ] mirror source quality + three-OS + Rust 1.85 gates from the umbrella path;
-5. [ ] normal-merge and re-verify exact merged main;
-6. [ ] repeat the same procedure independently for `distributed-systems-lab` using its six-cell Python matrix;
-7. [ ] defer `tinydb-c` until PR #5 is completed or explicitly superseded and a new clean preflight passes.
+- [x] freeze exact source `fba592f25225621f83931662565120c43ede1885` after zero-open-PR/live-main recheck;
+- [x] verify exact source CI `34061539532` across quality, Ubuntu/macOS/Windows tests, and Rust 1.85;
+- [x] run migration-time complete provenance/hygiene audit over all 131 reachable source commits;
+- [x] preserve exactly four historical `github-actions[bot]` co-author trailers and reject other configured attribution markers;
+- [x] perform non-squashed subtree import as `70ead65382d116f09ab95c7f195cdbdde06b0e69` with the exact source SHA as second parent;
+- [x] prove source ancestry and tree `4c5bb1129c4b145923dafa2003412bcda8c0c806` equals `projects/database-design-lab`;
+- [x] remove temporary write-capable bootstrap workflow;
+- [x] add permanent read-only source-equivalent migration CI;
+- [ ] pass exact migration-PR head gates;
+- [ ] normal-merge and pass exact merged-main gates.
 
-Import order is decided by source stability and architecture value, not by project age or line count. If a READY source opens a new implementation PR before import, it returns to HOLD.
+### `distributed-systems-lab`
+
+- [x] freeze READY candidate `1837b0ece467e3dff598643768b91543acc1350a` after #82 merged, zero open PRs and exact-main CI `34064569580` success;
+- [ ] recheck the READY candidate immediately before import;
+- [ ] perform the independent non-squashed import and exact tree proof;
+- [ ] mirror Ubuntu/macOS/Windows × Python 3.11/3.13 Ruff/pytest gates;
+- [ ] normal-merge and re-verify exact merged main.
+
+### `tinydb-c`
+
+- [ ] defer import until Stage 1 PR #5 is completed or explicitly superseded and a new clean preflight passes.
+
+Import count is not a goal. If a READY source opens a new implementation lane before import, it returns to HOLD.
 
 ## Phase 2 — Explicit local data contracts
 
-Potential work after at least two stable imports:
+Potential work after at least two verified imports:
 
 - [ ] identify a bounded common transaction/workload subset before any database differential claim;
 - [ ] define exact snapshot/checkpoint/recovery artifact semantics where a real producer/consumer pair exists;
@@ -42,13 +48,13 @@ Potential work after at least two stable imports:
 
 ## Phase 3 — Distributed state integration
 
-Highest-value candidate edge after the two READY imports are actually verified:
+Highest-value candidate after `database-design-lab` and `distributed-systems-lab` are both exact-main verified imports:
 
-- [ ] define a deterministic replicated state-machine command/reply boundary between `distributed-systems-lab` and `database-design-lab`;
-- [ ] test command identity/order, replay, snapshot restore, leader/follower failure, and acknowledged durability at that boundary;
-- [ ] make the consistency/durability claim no broader than the executable test.
+- [ ] define a deterministic replicated state-machine command/reply boundary between the consensus layer and the relational/storage engine;
+- [ ] test command identity/order, replay, snapshot restore, leader/follower failure, and acknowledged durability;
+- [ ] permanently gate the exact bounded consistency/durability claim.
 
-No distributed-database claim exists until such a boundary is real.
+No distributed-database claim exists until such a boundary is executable.
 
 ## Phase 4 — Flagship checkpoint
 
@@ -64,5 +70,5 @@ Not complete until:
 - merging independent databases into one codebase for aesthetics;
 - calling consensus + storage a distributed database without a tested state-machine contract;
 - pretending differing SQL/durability semantics are equivalent;
-- importing a stale main while a large implementation PR owns the source;
+- importing a stale main while an implementation PR owns the source;
 - rewriting genuine authorship during consolidation.
