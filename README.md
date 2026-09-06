@@ -8,11 +8,13 @@ This repository is **not** a monolithic database product and does not imply that
 
 | Project | Primary role | Live status |
 | --- | --- | --- |
-| [database-design-lab](https://github.com/Lei-TzuY/database-design-lab) | relational engine, indexes, durability/recovery | **HOLD** — implementation PR #128 active; observed main `35c226fb...` |
-| [distributed-systems-lab](https://github.com/Lei-TzuY/distributed-systems-lab) | consensus, replication, failure/reordering correctness | **HOLD** — implementation PR #65 active; observed main `5cd1fa28...` |
+| [database-design-lab](https://github.com/Lei-TzuY/database-design-lab) | relational engine, indexes, durability/recovery | **READY FOR IMPORT** — `fba592f2...`; exact-main CI `34061539532` 5/5 green |
+| [distributed-systems-lab](https://github.com/Lei-TzuY/distributed-systems-lab) | consensus, replication, failure/reordering correctness | **READY FOR IMPORT** — `1837b0ec...`; exact-main six-cell CI `34064569580` green |
 | [tinydb-c](https://github.com/Lei-TzuY/tinydb-c) | C SQL database, pager/WAL/B+ tree/query engine | **HOLD** — Stage 1 stabilization PR #5 active; observed main `c0de1768...` |
 
-No project is currently frozen for import. That is intentional: all three sources have active implementation or stabilization work, so importing an older `main` would create an immediately stale umbrella snapshot.
+The first two sources have now crossed preflight: zero open implementation PRs, exact-main CI, repository-hygiene review, provenance review, and an explicit source-equivalent umbrella verification contract are recorded in `projects/manifest.json`. `tinydb-c` remains intentionally deferred; import count is not a reason to bypass its active Stage 1 lane.
+
+No source is shown as imported yet. A READY checkpoint still requires a genuine non-squashed history-preserving migration, exact source-tree ↔ imported-subtree proof, umbrella CI, normal merge, and exact merged-main re-verification.
 
 ## Architectural story
 
@@ -45,10 +47,10 @@ A shared README, matching nouns such as WAL/transaction/replication, or copying 
 
 ## Migration invariants
 
-1. Recheck exact source `main`, open PRs, recent commits and CI immediately before every freeze.
+1. Recheck exact source `main`, open PRs, recent commits and CI immediately before every freeze/import.
 2. Any active implementation/stabilization PR puts that source on HOLD.
 3. Preserve source history with non-squashed subtree migration; never substitute a ZIP/current-tree copy.
-4. Audit newly reachable history and repository hygiene before import.
+4. Audit reachable history and repository hygiene before import; preserve genuine historical provenance rather than rewriting it.
 5. Prove source tree equals imported subtree at the frozen SHA.
 6. Run source-equivalent native CI from the umbrella path.
 7. Remove temporary write-capable migration machinery before the actual import PR.
@@ -56,4 +58,4 @@ A shared README, matching nouns such as WAL/transaction/replication, or copying 
 9. Keep source repositories available.
 10. Never claim distributed/database interoperability without executable proof.
 
-`projects/manifest.json` is the machine-checked Phase 0 ledger. See [ROADMAP.md](ROADMAP.md) and [docs/MIGRATION.md](docs/MIGRATION.md).
+`projects/manifest.json` is the machine-checked source ledger. See [ROADMAP.md](ROADMAP.md) and [docs/MIGRATION.md](docs/MIGRATION.md).
