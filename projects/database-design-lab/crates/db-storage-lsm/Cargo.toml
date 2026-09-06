@@ -1,0 +1,21 @@
+[package]
+name = "db-storage-lsm"
+description = "Write-ahead-log and MemTable foundation for Database Design Lab"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+crc32fast.workspace = true
+db-core = { path = "../db-core" }
+same-file = "1.0.6"
+serde.workspace = true
+
+[dev-dependencies]
+db-storage-memory = { path = "../db-storage-memory" }
+tempfile.workspace = true
+
+[lints]
+workspace = true

@@ -1,0 +1,151 @@
+name: Database design migration
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'projects/database-design-lab/**'
+      - 'projects/manifest.json'
+      - '.github/workflows/database-design-lab.yml'
+  pull_request:
+    paths:
+      - 'projects/database-design-lab/**'
+      - 'projects/manifest.json'
+      - '.github/workflows/database-design-lab.yml'
+
+permissions:
+  contents: read
+
+env:
+  SOURCE_SHA: fba592f25225621f83931662565120c43ede1885
+  SOURCE_TREE: 4c5bb1129c4b145923dafa2003412bcda8c0c806
+  PROJECT_DIR: projects/database-design-lab
+
+jobs:
+  history-tree-provenance:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Verify preserved source ancestry and tree
+        shell: bash
+        run: |
+          set -euo pipefail
+          git merge-base --is-ancestor "$SOURCE_SHA" HEAD
+          test "$(git rev-parse "${SOURCE_SHA}^{tree}")" = "$SOURCE_TREE"
+          test "$(git rev-parse "HEAD:${PROJECT_DIR}")" = "$SOURCE_TREE"
+      - name: Verify preserved source provenance
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import subprocess
+
+          source = "fba592f25225621f83931662565120c43ede1885"
+          raw = subprocess.check_output(
+              ["git", "log", source, "--format=%H%x00%B%x00"], text=True
+          )
+          parts = raw.split("\0")
+          commits = []
+          for i in range(0, len(parts) - 1, 2):
+              sha, body = parts[i].strip(), parts[i + 1]
+              if sha:
+                  commits.append((sha, body))
+
+          allowed_line = (
+              "co-authored-by: github-actions[bot] "
+              "<41898282+github-actions[bot]@users.noreply.github.com>"
+          )
+          expected = {
+              "73655e72883d939718f3711bce5a9f9c909e9af6",
+              "daa2095e892e5532a067a5ca430aaa0814bd7db5",
+              "ab97a9ddd8d7fbf29b756e2dade623eb2bb5c45d",
+              "fc27301845eb5293fe9f2c3160b7c2317806b1f0",
+          }
+          coauthors = []
+          forbidden = []
+          tokens = (
+              "generated-by:",
+              "assisted-by:",
+              "signed-off-by:",
+              "claude",
+              "anthropic",
+              "openai",
+          )
+          for sha, body in commits:
+              for line in body.splitlines():
+                  normalized = line.strip().lower()
+                  if normalized.startswith("co-authored-by:"):
+                      coauthors.append((sha, normalized))
+                      if normalized != allowed_line:
+                          forbidden.append((sha, line.strip()))
+                  if any(token in normalized for token in tokens):
+                      forbidden.append((sha, line.strip()))
+
+          observed = {sha for sha, _ in coauthors}
+          if forbidden:
+              raise SystemExit(f"forbidden attribution markers: {forbidden}")
+          if len(coauthors) != 4 or observed != expected:
+              raise SystemExit(
+                  f"legacy bot provenance mismatch: count={len(coauthors)} commits={sorted(observed)}"
+              )
+          print(
+              f"audited {len(commits)} reachable source commits; "
+              "legacy GitHub Actions bot trailers=4; other configured markers=0"
+          )
+          PY
+
+  quality:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: projects/database-design-lab
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+      - name: Check formatting
+        run: cargo fmt --all -- --check
+      - name: Clippy
+        run: cargo clippy --workspace --all-targets --all-features --locked -- -D warnings
+      - name: Test
+        run: cargo test --workspace --all-features --locked
+      - name: Build documentation
+        env:
+          RUSTDOCFLAGS: -D warnings
+        run: cargo doc --workspace --all-features --no-deps --locked
+
+  portability:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        working-directory: projects/database-design-lab
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Run test suite
+        run: cargo test --workspace --all-features --locked
+
+  msrv:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: projects/database-design-lab
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: dtolnay/rust-toolchain@1.85.0
+      - name: Check workspace
+        run: cargo check --workspace --all-targets --all-features --locked

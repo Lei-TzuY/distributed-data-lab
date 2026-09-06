@@ -1,0 +1,120 @@
+[package]
+name = "db-cli"
+description = "Command-line harness for Database Design Lab"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[[bin]]
+name = "db-lab"
+path = "src/main.rs"
+
+[[bin]]
+name = "db-lab-batch"
+path = "src/bin/db-lab-batch.rs"
+
+[[bin]]
+name = "db-lab-batch-verify"
+path = "src/bin/db-lab-batch-verify.rs"
+
+[[bin]]
+name = "db-lab-batch-analyze"
+path = "src/bin/db-lab-batch-analyze.rs"
+
+[[bin]]
+name = "db-lab-batch-analysis-bundle"
+path = "src/bin/db-lab-batch-analysis-bundle.rs"
+
+[[bin]]
+name = "db-lab-host-preflight"
+path = "src/bin/db-lab-host-preflight.rs"
+
+[[bin]]
+name = "db-lab-host-preflight-verify"
+path = "src/bin/db-lab-host-preflight-verify.rs"
+
+[[bin]]
+name = "db-lab-publication-session"
+path = "src/bin/db-lab-publication-session.rs"
+
+[[bin]]
+name = "db-lab-log-compact"
+path = "src/bin/db-lab-log-compact.rs"
+
+[[bin]]
+name = "db-lab-log-generation-verify"
+path = "src/bin/db-lab-log-generation-verify.rs"
+
+[[bin]]
+name = "db-lab-log-generation-publish"
+path = "src/bin/db-lab-log-generation-publish.rs"
+
+[[bin]]
+name = "db-lab-log-generation-compact-switch"
+path = "src/bin/db-lab-log-generation-compact-switch.rs"
+
+[[bin]]
+name = "db-lab-log-generation-cleanup"
+path = "src/bin/db-lab-log-generation-cleanup.rs"
+
+[[bin]]
+name = "db-lab-log-generation-cleanup-windows"
+path = "src/bin/db-lab-log-generation-cleanup-windows.rs"
+
+[[bin]]
+name = "db-lab-log-generation-lock"
+path = "src/bin/db-lab-log-generation-lock.rs"
+
+[[bin]]
+name = "db-lab-log-generation-reserve"
+path = "src/bin/db-lab-log-generation-reserve.rs"
+
+[[bin]]
+name = "db-lab-log-generation-orphan"
+path = "src/bin/db-lab-log-generation-orphan.rs"
+
+[[bin]]
+name = "db-lab-log-generation-orphan-retire-windows"
+path = "src/bin/db-lab-log-generation-orphan-retire-windows.rs"
+
+[[bin]]
+name = "db-lab-log-generation-migrate"
+path = "src/bin/db-lab-log-generation-migrate.rs"
+
+[[bin]]
+name = "db-lab-log-generation-cutover"
+path = "src/bin/db-lab-log-generation-cutover.rs"
+
+[[bin]]
+name = "db-lab-log-generation-cutover-verify"
+path = "src/bin/db-lab-log-generation-cutover-verify.rs"
+
+[[bin]]
+name = "db-lab-log-generation-run"
+path = "src/bin/db-lab-log-generation-run.rs"
+
+[[bin]]
+name = "db-lab-shrink"
+path = "src/bin/db-lab-shrink.rs"
+
+[dependencies]
+clap.workspace = true
+db-core = { path = "../db-core" }
+db-storage-btree = { path = "../db-storage-btree" }
+db-storage-lsm = { path = "../db-storage-lsm" }
+db-storage-log = { path = "../db-storage-log" }
+db-storage-memory = { path = "../db-storage-memory" }
+serde.workspace = true
+serde_json.workspace = true
+tempfile.workspace = true
+thiserror.workspace = true
+
+[lints.rust]
+unsafe_code = "deny"
+
+[lints.clippy]
+dbg_macro = "deny"
+todo = "deny"
+unimplemented = "deny"

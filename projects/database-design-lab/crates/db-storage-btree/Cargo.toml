@@ -1,0 +1,20 @@
+[package]
+name = "db-storage-btree"
+description = "Checksummed page and pager foundation for the Database Design Lab B+ tree"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+crc32fast.workspace = true
+db-core = { path = "../db-core" }
+thiserror.workspace = true
+
+[dev-dependencies]
+db-storage-memory = { path = "../db-storage-memory" }
+tempfile.workspace = true
+
+[lints]
+workspace = true

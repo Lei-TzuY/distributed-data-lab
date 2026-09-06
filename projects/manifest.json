@@ -8,12 +8,16 @@
       "source_repository": "Lei-TzuY/database-design-lab",
       "target_path": "projects/database-design-lab",
       "layer": "relational-storage-engine",
-      "status": "ready-for-import",
+      "status": "imported-verified",
       "observed_main_sha": "fba592f25225621f83931662565120c43ede1885",
+      "imported_source_sha": "fba592f25225621f83931662565120c43ede1885",
       "source_tree_sha": "4c5bb1129c4b145923dafa2003412bcda8c0c806",
+      "subtree_commit": "70ead65382d116f09ab95c7f195cdbdde06b0e69",
       "blocker": null,
       "source_ci_run_id": 34061539532,
       "source_ci_conclusion": "success",
+      "bootstrap_run_id": 34064926421,
+      "reachable_source_commit_count": 131,
       "source_equivalent_ci": [
         "cargo fmt --all -- --check",
         "cargo clippy --workspace --all-targets --all-features --locked -- -D warnings",
@@ -22,9 +26,10 @@
         "Rust 1.85: cargo check --workspace --all-targets --all-features --locked"
       ],
       "legacy_github_actions_bot_trailer_count": 4,
-      "provenance_notes": "Canonical commit history was traversed through the GitHub commits API from the exact source head until the first empty page. Configured attribution searches found exactly four Co-authored-by trailers, all github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>, and zero Generated-By, Assisted-By, Signed-off-by, Claude, Anthropic, or OpenAI hits. Preserve the four historical CI-bot trailers; do not rewrite source history.",
-      "repository_hygiene_notes": "Exact source tree contains LICENSE, Cargo workspace/lockfile, source/tests/docs/workflows and no .gitmodules or committed target/cache tree observed in the recursive tree review.",
-      "integration_notes": "Potential differential or replicated-state edges require an explicit common workload/state contract; no equivalence with tinydb-c is assumed."
+      "provenance_notes": "Migration bootstrap run 34064926421 fetched the exact source history and scanned all 131 commits reachable from fba592f25225621f83931662565120c43ede1885. Exactly four Co-authored-by trailers were present, all github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>, on the four preflight-identified commits; all other Co-authored-by values and Generated-By, Assisted-By, Signed-off-by, Claude, Anthropic, and OpenAI markers were zero. The four historical CI-bot trailers are preserved rather than rewritten.",
+      "repository_hygiene_notes": "Exact source tree contains LICENSE, Cargo workspace/lockfile, source/tests/docs/workflows and no .gitmodules or committed target/cache tree observed. Bootstrap run 34064926421 repeated the exact-tree and hygiene checks immediately before import.",
+      "migration_notes": "Non-squashed subtree commit 70ead65382d116f09ab95c7f195cdbdde06b0e69 has the migration branch as first parent and exact source fba592f25225621f83931662565120c43ede1885 as second parent. Bootstrap proved source ancestry and exact source-tree == imported-subtree equality. The temporary write-capable bootstrap workflow was removed before the migration PR; permanent verification is read-only.",
+      "integration_notes": "Imported as an independently verifiable relational/storage engine. No distributed-database, cross-engine equivalence, or replicated-state interoperability claim is implied by the import."
     },
     {
       "name": "distributed-systems-lab",

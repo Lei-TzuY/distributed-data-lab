@@ -1,0 +1,3 @@
+# The parse-once CLI command enum intentionally carries rich experiment metadata inline.
+# Keep the large-enum warning active for larger gaps while admitting this bounded CLI-only case.
+enum-variant-size-threshold = 256
