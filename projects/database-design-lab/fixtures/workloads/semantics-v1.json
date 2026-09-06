@@ -1,0 +1,17 @@
+{
+  "format_version": 1,
+  "seed": null,
+  "steps": [
+    { "op": "put", "key": "", "value": "" },
+    { "op": "get", "key": "" },
+    { "op": "put", "key": "00ff80", "value": "00017fff" },
+    { "op": "put", "key": "00ff80", "value": "42" },
+    { "op": "delete", "key": "6d697373696e67" },
+    { "op": "delete", "key": "00ff80" },
+    { "op": "reopen" },
+    { "op": "get", "key": "00ff80" },
+    { "op": "put", "key": "00ff80", "value": "" },
+    { "op": "reopen" },
+    { "op": "get", "key": "00ff80" }
+  ]
+}

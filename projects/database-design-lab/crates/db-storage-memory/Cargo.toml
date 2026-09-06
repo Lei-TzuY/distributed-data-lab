@@ -1,0 +1,14 @@
+[package]
+name = "db-storage-memory"
+description = "Deterministic in-memory oracle for Database Design Lab"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+db-core = { path = "../db-core" }
+
+[lints]
+workspace = true
