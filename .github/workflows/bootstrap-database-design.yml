@@ -1,0 +1,136 @@
+name: Bootstrap database-design-lab migration
+
+on:
+  push:
+    branches:
+      - migration/database-design-lab
+    paths:
+      - .github/workflows/bootstrap-database-design.yml
+
+permissions:
+  contents: write
+
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    env:
+      SOURCE_REPO: Lei-TzuY/database-design-lab
+      SOURCE_SHA: fba592f25225621f83931662565120c43ede1885
+      SOURCE_TREE: 4c5bb1129c4b145923dafa2003412bcda8c0c806
+      TARGET_PATH: projects/database-design-lab
+    steps:
+      - name: Checkout umbrella history
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Recheck live source freeze
+        shell: bash
+        run: |
+          set -euo pipefail
+          live_sha="$(git ls-remote "https://github.com/${SOURCE_REPO}.git" refs/heads/main | awk '{print $1}')"
+          test "$live_sha" = "$SOURCE_SHA"
+          python - <<'PY'
+          import json
+          import urllib.request
+
+          url = "https://api.github.com/repos/Lei-TzuY/database-design-lab/pulls?state=open&per_page=100"
+          req = urllib.request.Request(url, headers={"Accept": "application/vnd.github+json"})
+          with urllib.request.urlopen(req) as response:
+              pulls = json.load(response)
+          if pulls:
+              raise SystemExit(f"source gained open PRs: {[pr['number'] for pr in pulls]}")
+          print("source main unchanged and open PR count is zero")
+          PY
+
+      - name: Fetch exact source history
+        shell: bash
+        run: |
+          set -euo pipefail
+          git remote add source "https://github.com/${SOURCE_REPO}.git"
+          git fetch --no-tags source main
+          test "$(git rev-parse source/main)" = "$SOURCE_SHA"
+          test "$(git rev-parse "${SOURCE_SHA}^{tree}")" = "$SOURCE_TREE"
+
+      - name: Audit complete source provenance and hygiene
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import subprocess
+
+          source = "source/main"
+          raw = subprocess.check_output(
+              ["git", "log", source, "--format=%H%x00%B%x00"], text=True
+          )
+          parts = raw.split("\0")
+          commits = []
+          for i in range(0, len(parts) - 1, 2):
+              sha, body = parts[i], parts[i + 1]
+              if sha:
+                  commits.append((sha, body))
+
+          allowed_line = (
+              "co-authored-by: github-actions[bot] "
+              "<41898282+github-actions[bot]@users.noreply.github.com>"
+          )
+          expected_commits = {
+              "73655e72883d939718f3711bce5a9f9c909e9af6",
+              "daa2095e892e5532a067a5ca430aaa0814bd7db5",
+              "ab97a9ddd8d7fbf29b756e2dade623eb2bb5c45d",
+              "fc27301845eb5293fe9f2c3160b7c2317806b1f0",
+          }
+          coauthors = []
+          forbidden = []
+          tokens = (
+              "generated-by:",
+              "assisted-by:",
+              "signed-off-by:",
+              "claude",
+              "anthropic",
+              "openai",
+          )
+          for sha, body in commits:
+              for line in body.splitlines():
+                  normalized = line.strip().lower()
+                  if normalized.startswith("co-authored-by:"):
+                      coauthors.append((sha, normalized))
+                      if normalized != allowed_line:
+                          forbidden.append((sha, line.strip()))
+                  if any(token in normalized for token in tokens):
+                      forbidden.append((sha, line.strip()))
+
+          observed = {sha for sha, _ in coauthors}
+          if forbidden:
+              raise SystemExit(f"forbidden attribution markers: {forbidden}")
+          if len(coauthors) != 4 or observed != expected_commits:
+              raise SystemExit(
+                  f"legacy bot provenance mismatch: count={len(coauthors)} commits={sorted(observed)}"
+              )
+          print(f"audited {len(commits)} reachable commits; legacy bot trailers=4; other configured markers=0")
+          PY
+
+          git ls-tree -r --name-only source/main > /tmp/source-tree.txt
+          ! grep -Fxq '.gitmodules' /tmp/source-tree.txt
+          ! grep -Eq '(^|/)(target|__pycache__|\.venv|\.pytest_cache)(/|$)' /tmp/source-tree.txt
+
+      - name: Import non-squashed subtree
+        shell: bash
+        run: |
+          set -euo pipefail
+          test ! -e "$TARGET_PATH"
+          git config user.name "LeiZ"
+          git config user.email "52287354+Lei-TzuY@users.noreply.github.com"
+          git subtree add \
+            --prefix="$TARGET_PATH" \
+            source "$SOURCE_SHA" \
+            -m "Import database-design-lab at ${SOURCE_SHA}"
+          git merge-base --is-ancestor "$SOURCE_SHA" HEAD
+          test "$(git rev-parse "${SOURCE_SHA}^{tree}")" = "$(git rev-parse "HEAD:${TARGET_PATH}")"
+
+      - name: Push migration branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git push origin "HEAD:${GITHUB_REF_NAME}"
