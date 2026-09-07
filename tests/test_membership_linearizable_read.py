@@ -70,3 +70,38 @@ def test_joint_linearizable_read_requires_both_voter_majorities() -> None:
     assert failures[-1].details["acknowledged_voters"] == ("n1", "n2", "n3")
     assert failures[-1].details["quorum_mode"] == "joint"
     safety.checkpoint()
+
+
+def test_read_barrier_revalidates_membership_after_peer_acknowledgement() -> None:
+    sim, cluster, _, kv = _reader_cluster()
+    sim.crash("n4")
+    sim.crash("n5")
+    safety = RaftSafetyHarness(cluster)
+    safety.checkpoint()
+
+    class ReconfiguringReplicator(MembershipAwareLeaderReplicator):
+        def __init__(self) -> None:
+            super().__init__(cluster.node("n1"))
+            self.transitioned = False
+
+        def replicate(self, peer: str, *, max_attempts: int | None = None) -> bool:
+            replicated = super().replicate(peer, max_attempts=max_attempts)
+            if peer == "n2" and replicated and not self.transitioned:
+                cluster.begin_joint_consensus("n1", ("n1", "n4", "n5"))
+                self.transitioned = True
+            return replicated
+
+    reconfiguring_replicator = ReconfiguringReplicator()
+    reader = LinearizableKVReader(kv, reconfiguring_replicator)
+
+    with pytest.raises(ReadQuorumUnavailable):
+        reader.get("k", max_attempts_per_peer=1)
+
+    assert reconfiguring_replicator.transitioned is True
+    failures = [
+        record for record in sim.trace if record.kind == "raft-linearizable-read-quorum-failed"
+    ]
+    assert failures[-1].details["acknowledged_voters"] == ("n1", "n2")
+    assert failures[-1].details["quorum_mode"] == "joint"
+    assert not [record for record in sim.trace if record.kind == "raft-linearizable-read"]
+    safety.checkpoint()
