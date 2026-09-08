@@ -172,3 +172,28 @@ def test_snapshot_transport_rejects_self_target_before_state_or_trace_mutation()
     assert kv.snapshot("n1") == {}
     assert tuple(sim.trace) == trace_before
     RaftSafetyHarness(cluster).checkpoint()
+
+
+def test_snapshot_transport_rejects_crashed_sender_before_trace_or_delivery() -> None:
+    sim = Simulator()
+    cluster = RaftCluster(sim, ("n1", "n2", "n3"))
+    kv, store, transport = _transport(sim, cluster)
+    follower = cluster.node("n3")
+    sim.crash("n1")
+    trace_before = tuple(sim.trace)
+
+    with pytest.raises(RuntimeError, match="crashed node 'n1' cannot send InstallSnapshot"):
+        transport.send_install_snapshot(
+            leader_id="n1",
+            follower_id="n3",
+            term=7,
+            snapshot=_snapshot(),
+        )
+
+    sim.run()
+    assert follower.current_term == 0
+    assert follower.log_base_index == 0
+    assert store.latest("n3") is None
+    assert kv.snapshot("n3") == {}
+    assert tuple(sim.trace) == trace_before
+    RaftSafetyHarness(cluster).checkpoint()
