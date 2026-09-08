@@ -89,6 +89,8 @@ class SnapshotTransport:
             raise ValueError("snapshot transport requires known Raft nodes")
         if leader_id == follower_id:
             raise ValueError("snapshot transport requires distinct Raft nodes")
+        if not self.sim.is_alive(leader_id):
+            raise RuntimeError(f"crashed node {leader_id!r} cannot send InstallSnapshot")
         if request_id < 0:
             raise ValueError("request_id must be non-negative")
         self.sim._record(
