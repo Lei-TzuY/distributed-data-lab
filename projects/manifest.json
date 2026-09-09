@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "umbrella": "Lei-TzuY/distributed-data-lab",
-  "generated_from_preflight_date": "2026-09-07",
+  "generated_from_preflight_date": "2026-09-09",
   "projects": [
     {
       "name": "database-design-lab",
@@ -36,20 +36,25 @@
       "source_repository": "Lei-TzuY/distributed-systems-lab",
       "target_path": "projects/distributed-systems-lab",
       "layer": "consensus-replication",
-      "status": "ready-for-import",
-      "observed_main_sha": "1837b0ece467e3dff598643768b91543acc1350a",
-      "source_tree_sha": "7f54c63fb8d67acde388747dc39544233f8c1dc0",
+      "status": "imported-verified",
+      "observed_main_sha": "f1638f9121ee550b688a3f6bf9ab03df369139dc",
+      "imported_source_sha": "f1638f9121ee550b688a3f6bf9ab03df369139dc",
+      "source_tree_sha": "b816d1f0a658a611887b5d4fe17f05a5499e9bd2",
+      "subtree_commit": "447a8c8493c1c612e9e9b8a66fd5c194a4200dd7",
       "blocker": null,
-      "source_ci_run_id": 34064569580,
+      "source_ci_run_id": 34318592362,
       "source_ci_conclusion": "success",
+      "bootstrap_run_id": 34332419886,
+      "reachable_source_commit_count": 110,
       "source_equivalent_ci": [
         "Ubuntu/macOS/Windows x Python 3.11/3.13",
         "python -m pip install -e .[dev]",
         "ruff check .",
         "pytest"
       ],
-      "provenance_notes": "The complete canonical commit list from the exact source head fits in one 100-entry GitHub commits API page and the next page is empty. Configured searches found zero Co-authored-by, Generated-By, Assisted-By, Signed-off-by, Claude, Anthropic, or OpenAI hits.",
-      "repository_hygiene_notes": "Recursive exact-tree review contains source, tests, docs, pyproject, and read-only CI with no .gitmodules or obvious committed cache/build payload. No top-level LICENSE file is present; migration must preserve that source state rather than invent licensing metadata.",
+      "provenance_notes": "Migration bootstrap run 34332419886 fetched exact source f1638f9121ee550b688a3f6bf9ab03df369139dc and audited all 110 reachable commits. Co-authored-by, Generated-By, Assisted-By, Signed-off-by, Claude, Anthropic, and OpenAI markers were all zero.",
+      "repository_hygiene_notes": "Exact source tree contains source, 297 tests, docs, pyproject, and read-only CI with no .gitmodules or committed target/cache payload. No top-level LICENSE file is present; the import preserves that source state rather than inventing licensing metadata.",
+      "migration_notes": "Non-squashed subtree commit 447a8c8493c1c612e9e9b8a66fd5c194a4200dd7 has bootstrap commit ea7a616830660f07e7f34b179054369952584b28 as first parent and exact source f1638f9121ee550b688a3f6bf9ab03df369139dc as second parent. Bootstrap proved source ancestry and exact source-tree == imported-subtree equality. The temporary write-capable workflow was removed before the migration PR; permanent verification is read-only.",
       "integration_notes": "Consensus/replication code is not a distributed database until a real state-machine command, snapshot, failure and durability boundary is executable."
     },
     {
