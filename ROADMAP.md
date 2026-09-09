@@ -21,15 +21,15 @@
 - [x] prove source ancestry and tree `4c5bb1129c4b145923dafa2003412bcda8c0c806` equals `projects/database-design-lab`;
 - [x] remove temporary write-capable bootstrap workflow;
 - [x] add permanent read-only source-equivalent migration CI;
-- [ ] pass exact migration-PR head gates;
-- [ ] normal-merge and pass exact merged-main gates.
+- [x] pass exact migration-PR head gates;
+- [x] normal-merge and pass exact merged-main gates (`9c1de1a...`, runs `34065376109` and `34065376168`).
 
 ### `distributed-systems-lab`
 
-- [x] freeze READY candidate `1837b0ece467e3dff598643768b91543acc1350a` after #82 merged, zero open PRs and exact-main CI `34064569580` success;
-- [ ] recheck the READY candidate immediately before import;
-- [ ] perform the independent non-squashed import and exact tree proof;
-- [ ] mirror Ubuntu/macOS/Windows × Python 3.11/3.13 Ruff/pytest gates;
+- [x] re-freeze exact source `f1638f9121ee550b688a3f6bf9ab03df369139dc` after #107 merged, zero open PRs and exact-main CI `34318592362` success;
+- [x] recheck exact source main and zero-open-PR state immediately before import;
+- [x] perform the independent non-squashed import as `447a8c8493c1c612e9e9b8a66fd5c194a4200dd7` and prove exact tree `b816d1f0a658a611887b5d4fe17f05a5499e9bd2`;
+- [x] add permanent Ubuntu/macOS/Windows × Python 3.11/3.13 Ruff/pytest gates;
 - [ ] normal-merge and re-verify exact merged main.
 
 ### `tinydb-c`

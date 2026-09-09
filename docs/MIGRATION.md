@@ -10,12 +10,12 @@ This document records migration governance, history-preserving imports, and cros
 - **IMPORTED / VERIFIED** — non-squashed source ancestry, exact tree identity and source-equivalent umbrella CI are all proven.
 - **INTEGRATION VERIFIED** — an executable cross-project data/distributed contract is permanently tested.
 
-## Live source ledger — 2026-09-07
+## Live source ledger — 2026-09-09
 
 | Project | Exact observed source | Status |
 | --- | --- | --- |
-| `database-design-lab` | `fba592f25225621f83931662565120c43ede1885` | **IMPORTED / VERIFIED candidate** — migration history/tree complete; PR/main permanent gates still required |
-| `distributed-systems-lab` | `1837b0ece467e3dff598643768b91543acc1350a` | **READY FOR IMPORT** |
+| `database-design-lab` | `fba592f25225621f83931662565120c43ede1885` | **IMPORTED / VERIFIED** — exact migration and merged-main gates green |
+| `distributed-systems-lab` | `f1638f9121ee550b688a3f6bf9ab03df369139dc` | **IMPORTED / VERIFIED candidate** — history/tree complete; PR/main permanent gates pending |
 | `tinydb-c` | `c0de1768ae3080ec6d12796f82e5abf5a27be89f` | **HOLD** — Stage 1 PR #5 active |
 
 Source state is re-read immediately before every migration. Historical green evidence never overrides a moved source head or a new implementation lane.
@@ -61,21 +61,24 @@ The temporary `contents: write` bootstrap workflow was deleted immediately after
 
 This import does **not** imply distributed-database, replication, or cross-engine interoperability.
 
-## READY candidate — `distributed-systems-lab`
+## Migration 2 — `distributed-systems-lab`
 
-Selected candidate: `1837b0ece467e3dff598643768b91543acc1350a`, tree `7f54c63fb8d67acde388747dc39544233f8c1dc0`.
+Frozen source: `f1638f9121ee550b688a3f6bf9ab03df369139dc`.
+Source tree: `b816d1f0a658a611887b5d4fe17f05a5499e9bd2`.
 
-PR #82 completed the membership-aware leadership-transfer catch-up path during live preflight, so the source was re-read after that merge:
+PR #107 completed the crashed-leader `InstallSnapshot` authority fence, so the source was re-read after that merge:
 
 - zero open implementation PRs;
-- exact-main CI `34064569580`: success;
+- exact-main CI `34318592362`: success;
 - Ubuntu/macOS/Windows × Python 3.11/3.13; every cell installs `.[dev]`, runs Ruff and pytest;
-- complete canonical commit list fits one 100-entry API page and page 2 is empty;
-- configured Co-authored-by, Generated-By, Assisted-By, Signed-off-by, Claude, Anthropic and OpenAI searches are all zero;
+- bootstrap run `34332419886` audited all 110 commits reachable from the exact source head;
+- configured Co-authored-by, Generated-By, Assisted-By, Signed-off-by, Claude, Anthropic and OpenAI markers are all zero;
 - exact source tree contains source/tests/docs/pyproject/CI, no `.gitmodules` or obvious committed build/cache payload;
 - no top-level LICENSE is present and migration must preserve that state rather than invent metadata.
 
-It remains READY, not imported, until its own independent non-squashed migration passes.
+Temporary bootstrap run `34332419886` then rechecked the same live main and zero open PRs, fetched the exact source history, repeated provenance/hygiene guards, and created non-squashed subtree commit `447a8c8493c1c612e9e9b8a66fd5c194a4200dd7`. Its first parent is bootstrap commit `ea7a616830660f07e7f34b179054369952584b28`; its second parent is exact source `f1638f9121ee550b688a3f6bf9ab03df369139dc`. The imported subtree tree equals `b816d1f0a658a611887b5d4fe17f05a5499e9bd2` exactly.
+
+The temporary `contents: write` workflow was removed before publication. Permanent `.github/workflows/distributed-systems-lab.yml` uses `contents: read`, re-proves source ancestry/tree/provenance, and mirrors the source's Ubuntu/macOS/Windows × Python 3.11/3.13 Ruff/pytest matrix. Candidate status remains until exact PR-head and merged-main runs pass.
 
 ## HOLD candidate — `tinydb-c`
 
