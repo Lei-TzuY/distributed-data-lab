@@ -67,11 +67,28 @@
       "source_repository": "Lei-TzuY/tinydb-c",
       "target_path": "projects/tinydb-c",
       "layer": "sql-storage-engine",
-      "status": "hold",
-      "observed_main_sha": "c0de1768ae3080ec6d12796f82e5abf5a27be89f",
-      "active_pr_number": 5,
-      "active_pr_head_sha": "c22699d8877bb9bb109c670a67d225e1285623d4",
-      "blocker": "Stage 1 stabilization PR #5 spans the authoritative storage/recovery/planner checkpoint and remains open; importing main now would intentionally omit that in-flight history.",
+      "status": "imported-verified",
+      "observed_main_sha": "81d98f75b92a80b6e103af86913009b2ec7a6ec2",
+      "imported_source_sha": "81d98f75b92a80b6e103af86913009b2ec7a6ec2",
+      "source_tree_sha": "e0c9006f316e6107f13845a3e5a1a0a94264b0e5",
+      "subtree_commit": "d5ebf9c21279a7da452e20be5f20b82085893174",
+      "blocker": null,
+      "source_pr_number": 5,
+      "source_pr_head_sha": "85555e75710936ce5e6a8cb8ac873ddb29135170",
+      "source_pr_ci_run_id": 34333863736,
+      "source_ci_run_id": 34334920828,
+      "source_ci_conclusion": "success",
+      "bootstrap_run_id": 34335988505,
+      "reachable_source_commit_count": 1370,
+      "source_equivalent_ci": [
+        "Ubuntu and Windows",
+        "cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug",
+        "cmake --build build --config Debug",
+        "python tests/run_all.py"
+      ],
+      "provenance_notes": "Migration bootstrap run 34335988505 fetched exact source 81d98f75b92a80b6e103af86913009b2ec7a6ec2 and audited all 1,370 reachable commits. Co-authored-by, Generated-By, Assisted-By, Signed-off-by, Claude, Anthropic, and OpenAI markers were all zero.",
+      "repository_hygiene_notes": "Exact source tree contains MIT LICENSE, CMake build metadata, Stage 1 stabilization documentation, source/tests and read-only CI, with no .gitmodules or committed build/cache tree. Bootstrap run 34335988505 repeated the exact-tree and hygiene checks immediately before import.",
+      "migration_notes": "Non-squashed subtree commit d5ebf9c21279a7da452e20be5f20b82085893174 has bootstrap commit 5a04ea92a4723d40777997f99335668979d385a4 as first parent and exact source 81d98f75b92a80b6e103af86913009b2ec7a6ec2 as second parent. Bootstrap proved source ancestry and exact source-tree == imported-subtree equality. The temporary write-capable workflow is removed before the migration PR; permanent verification is read-only.",
       "integration_notes": "No SQLite-replacement, arbitrary concurrency, replication or cross-engine equivalence claim is inherited by the umbrella."
     }
   ]

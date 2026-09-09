@@ -16,7 +16,7 @@ This document records migration governance, history-preserving imports, and cros
 | --- | --- | --- |
 | `database-design-lab` | `fba592f25225621f83931662565120c43ede1885` | **IMPORTED / VERIFIED** — exact migration and merged-main gates green |
 | `distributed-systems-lab` | `f1638f9121ee550b688a3f6bf9ab03df369139dc` | **IMPORTED / VERIFIED** — exact migration and merged-main gates green |
-| `tinydb-c` | `c0de1768ae3080ec6d12796f82e5abf5a27be89f` | **HOLD** — Stage 1 PR #5 active |
+| `tinydb-c` | `81d98f75b92a80b6e103af86913009b2ec7a6ec2` | **IMPORT CANDIDATE** — non-squashed subtree present; exact migration-PR verification pending |
 
 Source state is re-read immediately before every migration. Historical green evidence never overrides a moved source head or a new implementation lane.
 
@@ -80,11 +80,24 @@ Temporary bootstrap run `34332419886` then rechecked the same live main and zero
 
 The temporary `contents: write` workflow was removed before publication. Permanent `.github/workflows/distributed-systems-lab.yml` uses `contents: read`, re-proves source ancestry/tree/provenance, and mirrors the source's Ubuntu/macOS/Windows × Python 3.11/3.13 Ruff/pytest matrix. PR #4 exact head `a1fff30503aac7ebc8a5446783e5ded2bac93073` passed runs `34332958390`, `34332958427`, and `34332958577`; normal merge `b5f4f364cb60d8e74cfb9ac7115233e03ef3062e` passed exact-main runs `34333643232`, `34333643233`, and `34333643318`.
 
-## HOLD candidate — `tinydb-c`
+## Migration 3 candidate — `tinydb-c`
 
-Observed main remains `c0de1768ae3080ec6d12796f82e5abf5a27be89f`.
+Frozen source: `81d98f75b92a80b6e103af86913009b2ec7a6ec2`.
+Source tree: `e0c9006f316e6107f13845a3e5a1a0a94264b0e5`.
 
-Stage 1 stabilization PR #5 remains the authoritative storage/recovery/planner lane at head `c22699d8877bb9bb109c670a67d225e1285623d4`. Do not import around that in-flight history. Re-run live main/open-PR/CI/provenance/hygiene preflight after Stage 1 completes or is explicitly superseded.
+The four unresolved review findings on Stage 1 PR #5 were repaired at exact head `85555e75710936ce5e6a8cb8ac873ddb29135170`: user-version metadata reads now use the frame read lock, write-unlock failure attempts pin release, nullable scan visitors remain nullable/defensive, and `profile.c` includes its required standard headers. The full local suite passed 293/293; exact PR-head run `34333863736` passed Ubuntu and Windows. The 1,360-commit PR was normal-merged to preserve history, producing source main `81d98f75b92a80b6e103af86913009b2ec7a6ec2`; exact merged-main run `34334920828` also passed Ubuntu and Windows.
+
+Final source preflight then established:
+
+- zero open PRs;
+- 1,370 commits reachable from the exact merged main;
+- configured Co-authored-by, Generated-By, Assisted-By, Signed-off-by, Claude, Anthropic and OpenAI markers all zero;
+- exact source tree contains MIT `LICENSE`, `CMakeLists.txt`, `STABILIZATION.md`, source/tests and read-only CI;
+- no `.gitmodules` or committed build/cache tree.
+
+Temporary bootstrap run `34335988505` rechecked the unchanged source main and zero-open-PR state, fetched exact history, repeated the provenance/hygiene guards, and created non-squashed subtree commit `d5ebf9c21279a7da452e20be5f20b82085893174`. Its first parent is bootstrap commit `5a04ea92a4723d40777997f99335668979d385a4`; its second parent is exact source `81d98f75b92a80b6e103af86913009b2ec7a6ec2`. The imported subtree tree equals `e0c9006f316e6107f13845a3e5a1a0a94264b0e5` exactly.
+
+The temporary `contents: write` workflow is removed before publication. Permanent `.github/workflows/tinydb-c.yml` uses `contents: read`, re-proves source ancestry/tree/provenance, and mirrors the source's CMake Debug build plus full test runner on Ubuntu and Windows. This candidate is not marked complete until exact migration-PR and exact merged-main gates pass.
 
 ## Preflight gate
 

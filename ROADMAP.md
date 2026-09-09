@@ -7,7 +7,7 @@
 - [x] add a machine-checked migration manifest and CI gate;
 - [x] re-run live source preflight after implementation lanes moved;
 - [x] promote stable `database-design-lab` and `distributed-systems-lab` checkpoints to READY FOR IMPORT;
-- [x] keep `tinydb-c` on HOLD while its authoritative Stage 1 stabilization lane remains active.
+- [x] repair and merge `tinydb-c` Stage 1 PR #5 only after exact Ubuntu/Windows CI, then re-freeze its clean source main.
 
 ## Phase 1 — History-preserving imports
 
@@ -34,7 +34,13 @@
 
 ### `tinydb-c`
 
-- [ ] defer import until Stage 1 PR #5 is completed or explicitly superseded and a new clean preflight passes.
+- [x] resolve all four review threads on PR #5 and pass exact-head Ubuntu/Windows CI at `85555e75710936ce5e6a8cb8ac873ddb29135170`;
+- [x] normal-merge Stage 1 as `81d98f75b92a80b6e103af86913009b2ec7a6ec2` and pass exact merged-main CI `34334920828`;
+- [x] require zero open PRs, freeze tree `e0c9006f316e6107f13845a3e5a1a0a94264b0e5`, and audit all 1,370 reachable commits;
+- [x] perform non-squashed subtree import as `d5ebf9c21279a7da452e20be5f20b82085893174` with the exact source as second parent;
+- [x] remove the write-capable bootstrap and add a permanent Ubuntu/Windows source-equivalent gate;
+- [ ] pass the exact migration PR head gates;
+- [ ] normal-merge and pass exact merged-main gates.
 
 Import count is not a goal. If a READY source opens a new implementation lane before import, it returns to HOLD.
 
