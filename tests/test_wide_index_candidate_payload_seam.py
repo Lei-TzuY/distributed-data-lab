@@ -43,6 +43,9 @@ def main():
     require(shim, "return tinydb_record_scan(table, schema, visitor, context);", "narrow scan delegation")
     require(shim, "tinydb_record_payload_scan(", "wide payload scan")
     require(shim, "tinydb_record_payload_decode_values(", "wide payload decode")
+    require(shim, "bridge == NULL || bridge->visitor == NULL", "defensive bridge visitor guard")
+    require(shim, "visitor == NULL ? NULL : tinydb_generic_index_payload_scan_bridge", "NULL visitor scan preservation")
+    require(shim, "visitor == NULL ? NULL : &bridge", "NULL visitor context preservation")
 
     # A truncated/corrupt payload traversal must never become a valid partial index
     # snapshot. The NULL sentinel deliberately drives the existing builder failure bit.

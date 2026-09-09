@@ -53,7 +53,22 @@ bool db_try_get_user_version(Table* table,
         return false;
     }
 
+    if (!pager_page_handle_acquire_read(&root_handle)) {
+        (void)pager_release_page_handle(&root_handle);
+        set_message(message,
+                    message_size,
+                    "could not acquire root-page read lock");
+        return false;
+    }
+
     uint32_t value = *node_parent(root_handle.data);
+    if (!pager_page_handle_release_read(&root_handle)) {
+        (void)pager_release_page_handle(&root_handle);
+        set_message(message,
+                    message_size,
+                    "could not release root-page read lock");
+        return false;
+    }
     if (!pager_release_page_handle(&root_handle)) {
         set_message(message,
                     message_size,
@@ -106,6 +121,7 @@ bool db_try_set_user_version(Table* table,
     mark_page_dirty(table->pager, table->root_page_num);
 
     if (!pager_page_handle_release_write(&root_handle)) {
+        (void)pager_release_page_handle(&root_handle);
         set_message(message,
                     message_size,
                     "user_version updated but root-page write lock could not be released");

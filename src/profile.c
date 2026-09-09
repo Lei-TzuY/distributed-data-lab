@@ -1,5 +1,7 @@
 #include "profile.h"
 
+#include <stdio.h>
+#include <string.h>
 #include <time.h>
 
 bool query_profile_execute(Statement* statement, Table* table, QueryProfile* profile) {

@@ -29,6 +29,7 @@ static bool tinydb_generic_index_payload_scan_bridge(
     void* raw_context) {
     TinyDBGenericIndexPayloadScanBridge* bridge =
         (TinyDBGenericIndexPayloadScanBridge*)raw_context;
+    if (bridge == NULL || bridge->visitor == NULL) return false;
     return bridge->visitor(schema,
                            (const TinyDBRecord*)(const void*)payload,
                            bridge->context);
@@ -49,14 +50,16 @@ static uint32_t tinydb_generic_index_payload_compatible_scan(
 
     bool scan_complete = false;
     char message[TINYDB_RECORD_MESSAGE_MAX];
-    uint32_t count = tinydb_record_payload_scan(
-        table,
-        schema,
-        tinydb_generic_index_payload_scan_bridge,
-        &bridge,
-        &scan_complete,
-        message,
-        sizeof(message));
+    TinyDBRecordPayloadVisitor payload_visitor =
+        visitor == NULL ? NULL : tinydb_generic_index_payload_scan_bridge;
+    void* payload_context = visitor == NULL ? NULL : &bridge;
+    uint32_t count = tinydb_record_payload_scan(table,
+                                                schema,
+                                                payload_visitor,
+                                                payload_context,
+                                                &scan_complete,
+                                                message,
+                                                sizeof(message));
 
     /* ensure_snapshot() already treats a visitor/decode failure as fatal. On
      * a traversal failure, feed the existing builder a NULL sentinel so it

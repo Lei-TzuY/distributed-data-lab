@@ -31,6 +31,16 @@ def main():
     db_path = os.path.join(os.path.dirname(__file__), "test_user_version_api_pin.db")
     cleanup(db_path)
 
+    with open(os.path.join(repo_root, "src", "user_version.c"), encoding="utf-8") as handle:
+        source = handle.read()
+    get_body, set_body = source.split("bool db_try_set_user_version", maxsplit=1)
+    assert "pager_page_handle_acquire_read(&root_handle)" in get_body
+    assert "pager_page_handle_release_read(&root_handle)" in get_body
+    release_error = set_body.split(
+        "if (!pager_page_handle_release_write(&root_handle))", maxsplit=1
+    )[1].split("}", maxsplit=1)[0]
+    assert "pager_release_page_handle(&root_handle)" in release_error
+
     try:
         result = subprocess.run(
             [probe, db_path],
