@@ -1,0 +1,106 @@
+name: TinyDB C migration
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'projects/tinydb-c/**'
+      - 'projects/manifest.json'
+      - '.github/workflows/tinydb-c.yml'
+  pull_request:
+    paths:
+      - 'projects/tinydb-c/**'
+      - 'projects/manifest.json'
+      - '.github/workflows/tinydb-c.yml'
+
+permissions:
+  contents: read
+
+env:
+  SOURCE_SHA: 81d98f75b92a80b6e103af86913009b2ec7a6ec2
+  SOURCE_TREE: e0c9006f316e6107f13845a3e5a1a0a94264b0e5
+  SOURCE_COMMIT_COUNT: "1370"
+  PROJECT_DIR: projects/tinydb-c
+
+jobs:
+  history-tree-provenance:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Verify preserved source ancestry and tree
+        shell: bash
+        run: |
+          set -euo pipefail
+          git merge-base --is-ancestor "$SOURCE_SHA" HEAD
+          test "$(git rev-parse "${SOURCE_SHA}^{tree}")" = "$SOURCE_TREE"
+          test "$(git rev-parse "HEAD:${PROJECT_DIR}")" = "$SOURCE_TREE"
+      - name: Verify preserved source provenance
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import os
+          import subprocess
+
+          source = os.environ["SOURCE_SHA"]
+          raw = subprocess.check_output(
+              ["git", "log", source, "--format=%H%x00%B%x00"], text=True
+          )
+          parts = raw.split("\0")
+          commits = []
+          for i in range(0, len(parts) - 1, 2):
+              sha, body = parts[i].strip(), parts[i + 1]
+              if sha:
+                  commits.append((sha, body))
+
+          expected_count = int(os.environ["SOURCE_COMMIT_COUNT"])
+          if len(commits) != expected_count:
+              raise SystemExit(
+                  f"source history mismatch: expected {expected_count}, got {len(commits)}"
+              )
+
+          markers = (
+              "co-authored-by:",
+              "generated-by:",
+              "assisted-by:",
+              "signed-off-by:",
+              "claude",
+              "anthropic",
+              "openai",
+          )
+          hits = []
+          for sha, body in commits:
+              for line in body.splitlines():
+                  normalized = line.strip().lower()
+                  if any(marker in normalized for marker in markers):
+                      hits.append((sha, line.strip()))
+          if hits:
+              raise SystemExit(f"unexpected attribution markers: {hits}")
+          print(f"audited {len(commits)} reachable source commits; configured markers=0")
+          PY
+
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        working-directory: projects/tinydb-c
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - name: Configure
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug
+      - name: Build
+        run: cmake --build build --config Debug
+      - name: Run all test suites
+        run: python tests/run_all.py
