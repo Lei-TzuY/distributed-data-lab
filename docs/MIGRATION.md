@@ -15,7 +15,7 @@ This document records migration governance, history-preserving imports, and cros
 | Project | Exact observed source | Status |
 | --- | --- | --- |
 | `database-design-lab` | `fba592f25225621f83931662565120c43ede1885` | **IMPORTED / VERIFIED** — exact migration and merged-main gates green |
-| `distributed-systems-lab` | `f1638f9121ee550b688a3f6bf9ab03df369139dc` | **IMPORTED / VERIFIED candidate** — history/tree complete; PR/main permanent gates pending |
+| `distributed-systems-lab` | `f1638f9121ee550b688a3f6bf9ab03df369139dc` | **IMPORTED / VERIFIED** — exact migration and merged-main gates green |
 | `tinydb-c` | `c0de1768ae3080ec6d12796f82e5abf5a27be89f` | **HOLD** — Stage 1 PR #5 active |
 
 Source state is re-read immediately before every migration. Historical green evidence never overrides a moved source head or a new implementation lane.
@@ -78,7 +78,7 @@ PR #107 completed the crashed-leader `InstallSnapshot` authority fence, so the s
 
 Temporary bootstrap run `34332419886` then rechecked the same live main and zero open PRs, fetched the exact source history, repeated provenance/hygiene guards, and created non-squashed subtree commit `447a8c8493c1c612e9e9b8a66fd5c194a4200dd7`. Its first parent is bootstrap commit `ea7a616830660f07e7f34b179054369952584b28`; its second parent is exact source `f1638f9121ee550b688a3f6bf9ab03df369139dc`. The imported subtree tree equals `b816d1f0a658a611887b5d4fe17f05a5499e9bd2` exactly.
 
-The temporary `contents: write` workflow was removed before publication. Permanent `.github/workflows/distributed-systems-lab.yml` uses `contents: read`, re-proves source ancestry/tree/provenance, and mirrors the source's Ubuntu/macOS/Windows × Python 3.11/3.13 Ruff/pytest matrix. Candidate status remains until exact PR-head and merged-main runs pass.
+The temporary `contents: write` workflow was removed before publication. Permanent `.github/workflows/distributed-systems-lab.yml` uses `contents: read`, re-proves source ancestry/tree/provenance, and mirrors the source's Ubuntu/macOS/Windows × Python 3.11/3.13 Ruff/pytest matrix. PR #4 exact head `a1fff30503aac7ebc8a5446783e5ded2bac93073` passed runs `34332958390`, `34332958427`, and `34332958577`; normal merge `b5f4f364cb60d8e74cfb9ac7115233e03ef3062e` passed exact-main runs `34333643232`, `34333643233`, and `34333643318`.
 
 ## HOLD candidate — `tinydb-c`
 

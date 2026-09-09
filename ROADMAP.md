@@ -30,7 +30,7 @@
 - [x] recheck exact source main and zero-open-PR state immediately before import;
 - [x] perform the independent non-squashed import as `447a8c8493c1c612e9e9b8a66fd5c194a4200dd7` and prove exact tree `b816d1f0a658a611887b5d4fe17f05a5499e9bd2`;
 - [x] add permanent Ubuntu/macOS/Windows × Python 3.11/3.13 Ruff/pytest gates;
-- [ ] normal-merge and re-verify exact merged main.
+- [x] normal-merge as `b5f4f364cb60d8e74cfb9ac7115233e03ef3062e` and re-verify exact merged main (runs `34333643232`, `34333643233`, and `34333643318`).
 
 ### `tinydb-c`
 

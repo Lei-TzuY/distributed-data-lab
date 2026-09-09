@@ -45,6 +45,11 @@
       "source_ci_run_id": 34318592362,
       "source_ci_conclusion": "success",
       "bootstrap_run_id": 34332419886,
+      "migration_pr_number": 4,
+      "migration_pr_head_sha": "a1fff30503aac7ebc8a5446783e5ded2bac93073",
+      "migration_pr_ci_run_ids": [34332958390, 34332958427, 34332958577],
+      "merged_main_sha": "b5f4f364cb60d8e74cfb9ac7115233e03ef3062e",
+      "merged_main_ci_run_ids": [34333643232, 34333643233, 34333643318],
       "reachable_source_commit_count": 110,
       "source_equivalent_ci": [
         "Ubuntu/macOS/Windows x Python 3.11/3.13",
