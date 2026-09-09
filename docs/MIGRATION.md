@@ -16,7 +16,7 @@ This document records migration governance, history-preserving imports, and cros
 | --- | --- | --- |
 | `database-design-lab` | `fba592f25225621f83931662565120c43ede1885` | **IMPORTED / VERIFIED** — exact migration and merged-main gates green |
 | `distributed-systems-lab` | `f1638f9121ee550b688a3f6bf9ab03df369139dc` | **IMPORTED / VERIFIED** — exact migration and merged-main gates green |
-| `tinydb-c` | `81d98f75b92a80b6e103af86913009b2ec7a6ec2` | **IMPORT CANDIDATE** — non-squashed subtree present; exact migration-PR verification pending |
+| `tinydb-c` | `81d98f75b92a80b6e103af86913009b2ec7a6ec2` | **IMPORTED / VERIFIED** — exact migration and merged-main gates green |
 
 Source state is re-read immediately before every migration. Historical green evidence never overrides a moved source head or a new implementation lane.
 
@@ -97,7 +97,7 @@ Final source preflight then established:
 
 Temporary bootstrap run `34335988505` rechecked the unchanged source main and zero-open-PR state, fetched exact history, repeated the provenance/hygiene guards, and created non-squashed subtree commit `d5ebf9c21279a7da452e20be5f20b82085893174`. Its first parent is bootstrap commit `5a04ea92a4723d40777997f99335668979d385a4`; its second parent is exact source `81d98f75b92a80b6e103af86913009b2ec7a6ec2`. The imported subtree tree equals `e0c9006f316e6107f13845a3e5a1a0a94264b0e5` exactly.
 
-The temporary `contents: write` workflow is removed before publication. Permanent `.github/workflows/tinydb-c.yml` uses `contents: read`, re-proves source ancestry/tree/provenance, and mirrors the source's CMake Debug build plus full test runner on Ubuntu and Windows. This candidate is not marked complete until exact migration-PR and exact merged-main gates pass.
+The temporary `contents: write` workflow was removed before publication. Permanent `.github/workflows/tinydb-c.yml` uses `contents: read`, re-proves source ancestry/tree/provenance, and mirrors the source's CMake Debug build plus full test runner on Ubuntu and Windows. PR #5 exact head `1547e9f56d9d27f98083f56fce972b4f3794008e` passed umbrella runs `34336374920`, `34336375001`, `34336374844`, and `34336374982`; normal merge `50008bb9b18af694ba050a692a808c544f1525f2` passed exact-main runs `34337504100`, `34337504096`, `34337504113`, and `34337504168`.
 
 ## Preflight gate
 

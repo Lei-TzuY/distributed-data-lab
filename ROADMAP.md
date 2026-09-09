@@ -39,8 +39,8 @@
 - [x] require zero open PRs, freeze tree `e0c9006f316e6107f13845a3e5a1a0a94264b0e5`, and audit all 1,370 reachable commits;
 - [x] perform non-squashed subtree import as `d5ebf9c21279a7da452e20be5f20b82085893174` with the exact source as second parent;
 - [x] remove the write-capable bootstrap and add a permanent Ubuntu/Windows source-equivalent gate;
-- [ ] pass the exact migration PR head gates;
-- [ ] normal-merge and pass exact merged-main gates.
+- [x] pass the exact migration PR head gates (`1547e9f...`, runs `34336374920`, `34336375001`, `34336374844`, `34336374982`);
+- [x] normal-merge as `50008bb9b18af694ba050a692a808c544f1525f2` and pass exact merged-main gates (`34337504100`, `34337504096`, `34337504113`, `34337504168`).
 
 Import count is not a goal. If a READY source opens a new implementation lane before import, it returns to HOLD.
 

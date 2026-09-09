@@ -79,6 +79,11 @@
       "source_ci_run_id": 34334920828,
       "source_ci_conclusion": "success",
       "bootstrap_run_id": 34335988505,
+      "migration_pr_number": 5,
+      "migration_pr_head_sha": "1547e9f56d9d27f98083f56fce972b4f3794008e",
+      "migration_pr_ci_run_ids": [34336374920, 34336375001, 34336374844, 34336374982],
+      "merged_main_sha": "50008bb9b18af694ba050a692a808c544f1525f2",
+      "merged_main_ci_run_ids": [34337504100, 34337504096, 34337504113, 34337504168],
       "reachable_source_commit_count": 1370,
       "source_equivalent_ci": [
         "Ubuntu and Windows",
