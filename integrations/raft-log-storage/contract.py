@@ -142,7 +142,7 @@ def _run_database(binary: Path, state_path: Path, workload: Path) -> dict[str, A
 
 def execute_contract(binary: Path | None = None) -> dict[str, Any]:
     """Run both imported projects and return canonical, replayable evidence."""
-    db_binary = binary or Path(os.environ.get("DB_LAB_BIN", DEFAULT_DB_BINARY))
+    db_binary = (binary or Path(os.environ.get("DB_LAB_BIN", DEFAULT_DB_BINARY))).resolve()
     if not db_binary.is_file():
         raise FileNotFoundError(
             f"database CLI not found at {db_binary}; build db-cli or set DB_LAB_BIN"
