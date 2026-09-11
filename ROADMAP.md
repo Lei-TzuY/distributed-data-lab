@@ -56,9 +56,9 @@ Potential work after at least two verified imports:
 
 Highest-value candidate after `database-design-lab` and `distributed-systems-lab` are both exact-main verified imports:
 
-- [ ] define a deterministic replicated state-machine command/reply boundary between the consensus layer and the relational/storage engine;
-- [ ] test command identity/order, replay, snapshot restore, leader/follower failure, and acknowledged durability;
-- [ ] permanently gate the exact bounded consistency/durability claim.
+- [ ] verify and merge `integrations/raft-log-storage/`, which executes a deterministic Raft majority-committed `Put`/`Delete` prefix, applies it on two replicas, projects only that applied prefix into the database workload contract, and requires a second `db-lab` process to reopen the durable append log with equivalent state;
+- [ ] extend the first bounded prefix contract to command identity/deduplication, snapshots, leader/follower failure, and an explicit acknowledgement-to-durability rule;
+- [ ] permanently gate only the exact bounded consistency/durability claims that those later executable contracts prove.
 
 No distributed-database claim exists until such a boundary is executable.
 

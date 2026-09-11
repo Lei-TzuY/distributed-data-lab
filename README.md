@@ -38,6 +38,20 @@ local data semantics / storage
 
 The lines above are **future hypotheses, not verified integration edges**. Importing the relational engine does not make it a distributed database. A real integration still needs an executable state-machine, snapshot, workload, or durability boundary.
 
+## Cross-project integration candidate
+
+`integrations/raft-log-storage/` now defines the first bounded executable
+candidate between two imported projects. The real `distributed-systems-lab`
+implementation elects a leader, commits a `Put`/`Delete` prefix through majority
+replication, and applies it on two replicas. That exact applied prefix is projected
+to the versioned workload accepted by the real `database-design-lab` append-log
+engine. A second database process must reopen the durable log and return the same
+state.
+
+This remains a **verification candidate until its integration PR and exact merged
+main both pass**. It does not yet justify a production distributed-database claim;
+the bounded exclusions are recorded in `integrations/manifest.json`.
+
 ## Migration invariants
 
 1. Recheck exact source `main`, open PRs, recent commits and CI immediately before every freeze/import.
