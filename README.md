@@ -36,21 +36,35 @@ local data semantics / storage
        consensus / replication / faults
 ```
 
-The lines above are **future hypotheses, not verified integration edges**. Importing the relational engine does not make it a distributed database. A real integration still needs an executable state-machine, snapshot, workload, or durability boundary.
+The broad product lines above remain future hypotheses. One bounded edge between
+`distributed-systems-lab` and `database-design-lab` is now verified below, but it
+does not turn the imported projects into a complete distributed database. The
+`tinydb-c` line remains entirely future work.
 
-## Cross-project integration candidate
+## Verified cross-project integration
 
-`integrations/raft-log-storage/` now defines the first bounded executable
-candidate between two imported projects. The real `distributed-systems-lab`
+`integrations/raft-log-storage/` is the first bounded executable edge between two
+imported projects. The real `distributed-systems-lab`
 implementation elects a leader, commits a `Put`/`Delete` prefix through majority
 replication, and applies it on two replicas. That exact applied prefix is projected
 to the versioned workload accepted by the real `database-design-lab` append-log
 engine. A second database process must reopen the durable log and return the same
 state.
 
-This remains a **verification candidate until its integration PR and exact merged
-main both pass**. It does not yet justify a production distributed-database claim;
-the bounded exclusions are recorded in `integrations/manifest.json`.
+Evidence: PR #6 exact head `48616d7058047a12f4b569596dd613425a27e96f`
+passed run `34570497138`; normal merge
+`17239e702ca38945201382c7a1769e90f6f4f392` passed exact-main run
+`34570574828`. The bounded exclusions are recorded in
+`integrations/manifest.json`.
+
+## Flagship checkpoint
+
+The umbrella now has three history-preserved, independently verified imports and
+one permanent, non-trivial cross-project executable edge. This satisfies the first
+Distributed Data flagship checkpoint. It remains a laboratory checkpoint, not a
+production distributed-database claim: acknowledgement-to-storage atomicity,
+snapshots, failure recovery and stronger replicated-durability contracts remain
+future milestones.
 
 ## Migration invariants
 
