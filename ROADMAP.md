@@ -56,20 +56,22 @@ Potential work after at least two verified imports:
 
 Highest-value candidate after `database-design-lab` and `distributed-systems-lab` are both exact-main verified imports:
 
-- [ ] verify and merge `integrations/raft-log-storage/`, which executes a deterministic Raft majority-committed `Put`/`Delete` prefix, applies it on two replicas, projects only that applied prefix into the database workload contract, and requires a second `db-lab` process to reopen the durable append log with equivalent state;
+- [x] verify and merge `integrations/raft-log-storage/`, which executes a deterministic Raft majority-committed `Put`/`Delete` prefix, applies it on two replicas, projects only that applied prefix into the database workload contract, and requires a second `db-lab` process to reopen the durable append log with equivalent state (PR #6 head `48616d7...`, run `34570497138`; merge `17239e7...`, exact-main run `34570574828`);
 - [ ] extend the first bounded prefix contract to command identity/deduplication, snapshots, leader/follower failure, and an explicit acknowledgement-to-durability rule;
 - [ ] permanently gate only the exact bounded consistency/durability claims that those later executable contracts prove.
 
-No distributed-database claim exists until such a boundary is executable.
+The first bounded boundary is executable. This does not yet prove atomic
+acknowledgement-to-storage durability, snapshot transport, failure recovery, or a
+production distributed database.
 
 ## Phase 4 — Flagship checkpoint
 
-Not complete until:
+**Complete at the first bounded flagship checkpoint:**
 
-- multiple source histories are imported and exact merged-main CI is green;
-- at least one non-trivial local-data or replicated-state cross-project edge is permanently executable;
-- manifest/docs distinguish READY, imported projects, and verified integrations;
-- no active migration debt is hidden by documentation.
+- [x] multiple source histories are imported and exact merged-main CI is green;
+- [x] one non-trivial replicated-state/storage edge is permanently executable;
+- [x] manifest/docs distinguish imported projects, verified integration and future hypotheses;
+- [x] active deeper-integration debt remains explicit rather than hidden.
 
 ## Non-goals
 

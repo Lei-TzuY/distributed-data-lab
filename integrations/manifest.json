@@ -1,10 +1,11 @@
 {
   "schema_version": 1,
   "umbrella": "Lei-TzuY/distributed-data-lab",
-  "candidate_integrations": [
+  "candidate_integrations": [],
+  "verified_integrations": [
     {
       "name": "raft-committed-prefix-to-append-log",
-      "status": "verification-candidate",
+      "status": "integration-verified",
       "participants": [
         "distributed-systems-lab",
         "database-design-lab"
@@ -24,6 +25,13 @@
         "separate database process reopen followed by complete touched-key comparison",
         "machine-checked participant source pins matching the verified import ledger"
       ],
+      "pr_number": 6,
+      "pr_head_sha": "48616d7058047a12f4b569596dd613425a27e96f",
+      "pr_manifest_run_id": 34570497138,
+      "pr_verification_run_id": 34570497138,
+      "merged_umbrella_sha": "17239e702ca38945201382c7a1769e90f6f4f392",
+      "umbrella_post_merge_manifest_run_id": 34570574828,
+      "umbrella_post_merge_verification_run_id": 34570574828,
       "limitations": [
         "does not atomically couple Raft acknowledgement to database sync_data",
         "does not replicate database files or database-design-lab engine internals",
@@ -31,6 +39,5 @@
         "does not prove arbitrary crash-timing safety, full linearizability, availability, Byzantine tolerance or performance"
       ]
     }
-  ],
-  "verified_integrations": []
+  ]
 }

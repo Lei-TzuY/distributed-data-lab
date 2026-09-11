@@ -23,6 +23,21 @@ REQUIRED_FIELDS = {
     "verification_contract",
     "limitations",
 }
+VERIFIED_FIELDS = {
+    "pr_number",
+    "pr_head_sha",
+    "pr_manifest_run_id",
+    "pr_verification_run_id",
+    "merged_umbrella_sha",
+    "umbrella_post_merge_manifest_run_id",
+    "umbrella_post_merge_verification_run_id",
+}
+RUN_ID_FIELDS = {
+    "pr_manifest_run_id",
+    "pr_verification_run_id",
+    "umbrella_post_merge_manifest_run_id",
+    "umbrella_post_merge_verification_run_id",
+}
 
 
 def fail(message: str) -> None:
@@ -136,6 +151,26 @@ def main() -> None:
                 fail(f"{name}: verification_contract must be a non-empty string list")
             if not string_list(integration["limitations"]):
                 fail(f"{name}: limitations must be a non-empty string list")
+            if expected_status == "integration-verified":
+                missing_evidence = VERIFIED_FIELDS - integration.keys()
+                if missing_evidence:
+                    fail(
+                        f"{name}: verified evidence is missing: "
+                        + ", ".join(sorted(missing_evidence))
+                    )
+                if (
+                    not isinstance(integration["pr_number"], int)
+                    or integration["pr_number"] <= 0
+                ):
+                    fail(f"{name}: pr_number must be a positive integer")
+                for field in ("pr_head_sha", "merged_umbrella_sha"):
+                    value = integration[field]
+                    if not isinstance(value, str) or SHA40.fullmatch(value) is None:
+                        fail(f"{name}: {field} must be an exact lowercase SHA")
+                for field in RUN_ID_FIELDS:
+                    value = integration[field]
+                    if not isinstance(value, int) or value <= 0:
+                        fail(f"{name}: {field} must be a positive integer")
 
     print(
         f"validated {len(candidates)} candidate and {len(verified)} verified "
