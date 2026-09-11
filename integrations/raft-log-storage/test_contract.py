@@ -22,7 +22,7 @@ class RaftLogStorageContractTest(unittest.TestCase):
         self.assertEqual(evidence["raft"]["replicas_checked"], ["n1", "n2"])
         self.assertGreaterEqual(evidence["raft"]["trace_counts"]["raft-commit-advance"], 1)
         self.assertTrue(evidence["database"]["process_reopen_verified"])
-        self.assertEqual(evidence["database"]["engine"], "append-log")
+        self.assertEqual(evidence["database"]["engine"], "append-log-v1")
         self.assertEqual(
             evidence["database"]["reads"],
             {
