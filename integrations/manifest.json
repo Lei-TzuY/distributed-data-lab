@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "umbrella": "Lei-TzuY/distributed-data-lab",
+  "candidate_integrations": [
+    {
+      "name": "raft-committed-prefix-to-append-log",
+      "status": "verification-candidate",
+      "participants": [
+        "distributed-systems-lab",
+        "database-design-lab"
+      ],
+      "participant_source_shas": {
+        "distributed-systems-lab": "f1638f9121ee550b688a3f6bf9ab03df369139dc",
+        "database-design-lab": "fba592f25225621f83931662565120c43ede1885"
+      },
+      "target_path": "integrations/raft-log-storage",
+      "workflow_path": ".github/workflows/raft-log-storage.yml",
+      "scope": "Execute the imported Raft election, majority replication, commit-index advancement and two-replica state-machine application; project the exact committed Put/Delete prefix into the imported database-design-lab workload schema; execute the real durable append-log engine; and require a second database process reopening that log to return state equivalent to both Raft replicas.",
+      "verification_contract": [
+        "real distributed-systems-lab Raft election and majority commit, with at least one raft-commit-advance trace",
+        "identical committed-prefix application and converged state on leader n1 and follower n2",
+        "fail-closed projection of only supported applied Put/Delete commands through UTF-8 lowercase hexadecimal workload bytes",
+        "real database-design-lab db-lab subprocess using its append-log engine",
+        "separate database process reopen followed by complete touched-key comparison",
+        "machine-checked participant source pins matching the verified import ledger"
+      ],
+      "limitations": [
+        "does not atomically couple Raft acknowledgement to database sync_data",
+        "does not replicate database files or database-design-lab engine internals",
+        "does not propagate client deduplication identities, snapshots, SQL or transactions",
+        "does not prove arbitrary crash-timing safety, full linearizability, availability, Byzantine tolerance or performance"
+      ]
+    }
+  ],
+  "verified_integrations": []
+}

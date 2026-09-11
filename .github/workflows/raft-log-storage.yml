@@ -1,0 +1,53 @@
+name: Raft committed-prefix durable storage integration
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "integrations/**"
+      - "scripts/validate_integrations.py"
+      - "projects/manifest.json"
+      - "projects/database-design-lab/**"
+      - "projects/distributed-systems-lab/**"
+      - ".github/workflows/raft-log-storage.yml"
+  pull_request:
+    paths:
+      - "integrations/**"
+      - "scripts/validate_integrations.py"
+      - "projects/manifest.json"
+      - "projects/database-design-lab/**"
+      - "projects/distributed-systems-lab/**"
+      - ".github/workflows/raft-log-storage.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  committed-prefix-durable-storage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: dtolnay/rust-toolchain@1.85.0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: projects/distributed-systems-lab/pyproject.toml
+      - name: Install distributed systems project
+        run: python -m pip install -e "projects/distributed-systems-lab[dev]"
+      - name: Build database CLI
+        run: >-
+          cargo build --manifest-path projects/database-design-lab/Cargo.toml
+          --locked -p db-cli
+      - name: Lint integration and validate ledger
+        run: |
+          ruff check integrations/raft-log-storage scripts/validate_integrations.py
+          python scripts/validate_integrations.py
+      - name: Execute committed-prefix durable-storage contract
+        env:
+          DB_LAB_BIN: projects/database-design-lab/target/debug/db-lab
+        run: >-
+          python -m unittest discover -s integrations/raft-log-storage
+          -p 'test_*.py' -v
