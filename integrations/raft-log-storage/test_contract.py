@@ -45,7 +45,7 @@ class RaftLogStorageContractTest(unittest.TestCase):
 
 class RaftLogStorageProjectionTest(unittest.TestCase):
     def setUp(self) -> None:
-        self.binary = Path(os.environ["DB_LAB_BIN"])
+        self.binary = Path(os.environ["DB_LAB_BIN"]).resolve()
 
     def reads(self, directory: Path, state_path: Path) -> dict[str, str | None]:
         keys = ["account/alice", "account/bob", "region/臺北"]
